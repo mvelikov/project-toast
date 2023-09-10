@@ -18,16 +18,32 @@ const ICONS_BY_VARIANT = {
   error: AlertOctagon,
 };
 
-function Toast() {
+function Toast({ message, variant, onClose = () => {} }) {
+  let style;
+  switch (variant) {
+    case 'notice':
+      style = styles.notice;
+      break;
+    case 'warning':
+      style = styles.warning;
+      break;
+    case 'success':
+      style = styles.success;
+      break;
+    case 'error':
+      style = styles.error;
+      break;
+    default:
+      throw new Error(`Unrecognized variant: ${variant}`);
+  }
+
   return (
-    <div className={`${styles.toast} ${styles.notice}`}>
+    <div className={`${styles.toast} ${style}`}>
       <div className={styles.iconContainer}>
-        <Info size={24} />
+        {React.createElement(ICONS_BY_VARIANT[variant], { size: 24 })}
       </div>
-      <p className={styles.content}>
-        16 photos have been uploaded
-      </p>
-      <button className={styles.closeButton}>
+      <p className={styles.content}>{message}</p>
+      <button className={styles.closeButton} onClick={onClose}>
         <X size={24} />
         <VisuallyHidden>Dismiss message</VisuallyHidden>
       </button>
