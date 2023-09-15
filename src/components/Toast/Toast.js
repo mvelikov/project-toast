@@ -18,7 +18,7 @@ const ICONS_BY_VARIANT = {
   error: AlertOctagon,
 };
 
-function Toast({ children, variant, onClose = () => {} }) {
+function Toast({ children, variant, id, onClose = () => {} }) {
   let style;
   switch (variant) {
     case 'notice':
@@ -43,7 +43,7 @@ function Toast({ children, variant, onClose = () => {} }) {
         {React.createElement(ICONS_BY_VARIANT[variant], { size: 24 })}
       </div>
       <p className={styles.content}>{children}</p>
-      <button className={styles.closeButton} onClick={onClose}>
+      <button className={styles.closeButton} onClick={() => onClose(id)}>
         <X size={24} />
         <VisuallyHidden>Dismiss message</VisuallyHidden>
       </button>
