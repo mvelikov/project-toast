@@ -16,11 +16,9 @@ function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
       {visible && (
-        <Toast
-          message={state.message}
-          variant={state.variant}
-          onClose={() => setVisible(false)}
-        />
+        <Toast variant={state.variant} onClose={() => setVisible(false)}>
+          {state.message}
+        </Toast>
       )}
       <div className={styles.controlsWrapper}>
         <div className={styles.row}>
