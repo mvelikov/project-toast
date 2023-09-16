@@ -1,51 +1,42 @@
 import React from 'react';
 
 import Button from '../Button';
+import { ToastContext } from '../ToastProvider';
 import ToastShelf from '../ToastShelf/ToastShelf';
 import styles from './ToastPlayground.module.css';
 
 const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
 
 function ToastPlayground() {
-  const [state, setState] = React.useState({
-    id: '',
-    message: '',
-    variant: 'notice',
-  });
-  const [collection, setCollection] = React.useState([]);
-
-  function onClose(id) {
-    setCollection(collection.filter((key) => key.id !== id));
+  function initToast() {
+    return {
+      id: '',
+      message: '',
+      variant: 'notice',
+    };
   }
-  function createToast(message) {
+  const [state, setState] = React.useState(initToast());
+
+  function create(message) {
     setState({
       ...state,
       id: Math.random().toString(36).slice(2),
       message: message,
     });
   }
-  function changeVariant(variant) {
+  function setVariant(variant) {
     setState({ ...state, variant });
   }
 
-  function showToast() {
-    if (collection.find((key) => key.id === state.id)) return;
-    setCollection([
-      ...collection,
-      {
-        message: state.message,
-        variant: state.variant,
-        id: state.id,
-      },
-    ]);
-  }
+  const toaster = React.useContext(ToastContext);
+
   return (
     <div className={styles.wrapper}>
       <header>
         <img alt="Cute toast mascot" src="/toast.png" />
         <h1>Toast Playground</h1>
       </header>
-      <ToastShelf collection={collection} onClose={onClose} />
+      <ToastShelf />
       <div className={styles.controlsWrapper}>
         <div className={styles.row}>
           <label
@@ -60,7 +51,8 @@ function ToastPlayground() {
               id="message"
               className={styles.messageInput}
               value={state.message}
-              onChange={(e) => createToast(e.target.value)}
+              onChange={(e) => create(e.target.value)}
+              required
             />
           </div>
         </div>
@@ -76,7 +68,7 @@ function ToastPlayground() {
                   name="variant"
                   value={variant}
                   checked={state.variant === variant}
-                  onChange={() => changeVariant(variant)}
+                  onChange={() => setVariant(variant)}
                 />
                 {variant}
               </label>
@@ -87,7 +79,15 @@ function ToastPlayground() {
         <div className={styles.row}>
           <div className={styles.label} />
           <div className={`${styles.inputWrapper} ${styles.radioWrapper}`}>
-            <Button onClick={() => showToast()}>Pop Toast!</Button>
+            <Button
+              onClick={() => {
+                toaster.show(state);
+                setState(initToast());
+              }}
+              disabled={!state.message}
+            >
+              Pop Toast!
+            </Button>
           </div>
         </div>
       </div>
