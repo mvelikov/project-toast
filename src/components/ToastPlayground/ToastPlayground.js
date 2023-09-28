@@ -81,7 +81,7 @@ function ToastPlayground() {
           <div className={`${styles.inputWrapper} ${styles.radioWrapper}`}>
             <Button
               onClick={() => {
-                toaster.show(state);
+                toaster.add(state);
                 setState(initToast());
               }}
               disabled={!state.message}
