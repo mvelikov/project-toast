@@ -20,8 +20,13 @@ function ToastProvider({ children }) {
       },
     ]);
   }
+
+  function dismissAll() {
+    setCollection([]);
+  }
+
   return (
-    <ToastContext.Provider value={{ onClose, add, collection }}>
+    <ToastContext.Provider value={{ onClose, add, collection, dismissAll }}>
       {children}
     </ToastContext.Provider>
   );

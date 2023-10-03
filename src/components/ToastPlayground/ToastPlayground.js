@@ -16,7 +16,7 @@ function ToastPlayground() {
     };
   }
   const [state, setState] = React.useState(initToast());
-
+  const toaster = React.useContext(ToastContext);
   function create(message) {
     setState({
       ...state,
@@ -28,7 +28,18 @@ function ToastPlayground() {
     setState({ ...state, variant });
   }
 
-  const toaster = React.useContext(ToastContext);
+  React.useEffect(() => {
+    function handleKeyDown(event) {
+      if (event.code === 'Escape') {
+        toaster.dismissAll();
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [toaster]);
 
   return (
     <div className={styles.wrapper}>
