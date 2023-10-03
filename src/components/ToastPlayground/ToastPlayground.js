@@ -93,7 +93,7 @@ function ToastPlayground() {
             <Button
               onClick={() => {
                 toaster.add(state);
-                setState(initToast());
+                setState({ ...initToast(), variant: state.variant });
               }}
               disabled={!state.message}
             >
