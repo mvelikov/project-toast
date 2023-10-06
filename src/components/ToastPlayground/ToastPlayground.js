@@ -6,28 +6,19 @@ import { ToastContext } from '../ToastProvider';
 import ToastShelf from '../ToastShelf/ToastShelf';
 import styles from './ToastPlayground.module.css';
 
-const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
+const VARIANT_OPTIONS = {
+  notice: 'notice',
+  warning: 'warning',
+  success: 'success',
+  error: 'error',
+};
 
 function ToastPlayground() {
-  function initToast() {
-    return {
-      id: '',
-      message: '',
-      variant: 'notice',
-    };
-  }
-  const [state, setState] = React.useState(initToast());
+  const [formState, setFormState] = React.useState({
+    message: '',
+    variant: VARIANT_OPTIONS['notice'],
+  });
   const toaster = React.useContext(ToastContext);
-  function create(message) {
-    setState({
-      ...state,
-      id: Math.random().toString(36).slice(2),
-      message: message,
-    });
-  }
-  function setVariant(variant) {
-    setState({ ...state, variant });
-  }
 
   useEscapeKey(toaster.dismissAll);
 
@@ -51,8 +42,10 @@ function ToastPlayground() {
             <textarea
               id="message"
               className={styles.messageInput}
-              value={state.message}
-              onChange={(e) => create(e.target.value)}
+              value={formState.message}
+              onChange={(e) =>
+                setFormState({ ...formState, message: e.target.value })
+              }
               required
             />
           </div>
@@ -61,15 +54,15 @@ function ToastPlayground() {
         <div className={styles.row}>
           <div className={styles.label}>Variant</div>
           <div className={`${styles.inputWrapper} ${styles.radioWrapper}`}>
-            {VARIANT_OPTIONS.map((variant) => (
+            {Object.values(VARIANT_OPTIONS).map((variant) => (
               <label htmlFor={`variant-${variant}`} key={variant}>
                 <input
                   id={`variant-${variant}`}
                   type="radio"
                   name="variant"
-                  value={variant}
-                  checked={state.variant === variant}
-                  onChange={() => setVariant(variant)}
+                  value={formState.variant}
+                  checked={formState.variant === variant}
+                  onChange={() => setFormState({ ...formState, variant })}
                 />
                 {variant}
               </label>
@@ -82,10 +75,10 @@ function ToastPlayground() {
           <div className={`${styles.inputWrapper} ${styles.radioWrapper}`}>
             <Button
               onClick={() => {
-                toaster.add(state);
-                setState({ ...initToast(), variant: state.variant });
+                toaster.create(formState.message, formState.variant);
+                setFormState({ ...formState, message: '' });
               }}
-              disabled={!state.message}
+              disabled={!formState.message}
             >
               Pop Toast!
             </Button>

@@ -9,14 +9,13 @@ function ToastProvider({ children }) {
     setCollection(collection.filter((key) => key.id !== id));
   }
 
-  function add(toast) {
-    if (collection.find((key) => key.id === toast.id)) return;
+  function create(message, variant) {
     setCollection([
       ...collection,
       {
-        message: toast.message,
-        variant: toast.variant,
-        id: toast.id,
+        message: message,
+        variant: variant,
+        id: Math.random().toString(36).slice(2),
       },
     ]);
   }
@@ -26,7 +25,7 @@ function ToastProvider({ children }) {
   }
 
   return (
-    <ToastContext.Provider value={{ onClose, add, collection, dismissAll }}>
+    <ToastContext.Provider value={{ onClose, create, collection, dismissAll }}>
       {children}
     </ToastContext.Provider>
   );
