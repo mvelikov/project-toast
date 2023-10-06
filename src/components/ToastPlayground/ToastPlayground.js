@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { useEscapeKey } from '../../hooks';
 import Button from '../Button';
 import { ToastContext } from '../ToastProvider';
 import ToastShelf from '../ToastShelf/ToastShelf';
@@ -19,8 +18,6 @@ function ToastPlayground() {
     variant: VARIANT_OPTIONS['notice'],
   });
   const toaster = React.useContext(ToastContext);
-
-  useEscapeKey(toaster.dismissAll);
 
   return (
     <div className={styles.wrapper}>

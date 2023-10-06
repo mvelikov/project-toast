@@ -1,10 +1,15 @@
 import React from 'react';
+import { useEscapeKey } from '../../hooks';
 
 export const ToastContext = React.createContext();
 
 function ToastProvider({ children }) {
   const [collection, setCollection] = React.useState([]);
 
+  const dismissAll = React.useCallback(() => {
+    setCollection([]);
+  }, []);
+  useEscapeKey(dismissAll);
   function onClose(id) {
     setCollection(collection.filter((key) => key.id !== id));
   }
@@ -20,12 +25,8 @@ function ToastProvider({ children }) {
     ]);
   }
 
-  function dismissAll() {
-    setCollection([]);
-  }
-
   return (
-    <ToastContext.Provider value={{ onClose, create, collection, dismissAll }}>
+    <ToastContext.Provider value={{ onClose, create, collection }}>
       {children}
     </ToastContext.Provider>
   );
