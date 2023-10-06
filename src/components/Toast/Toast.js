@@ -42,10 +42,19 @@ function Toast({ children, variant, id, onClose = () => {} }) {
       <div className={styles.iconContainer}>
         {React.createElement(ICONS_BY_VARIANT[variant], { size: 24 })}
       </div>
-      <p className={styles.content}>{children}</p>
-      <button className={styles.closeButton} onClick={() => onClose(id)}>
+      <p className={styles.content}>
+        <>
+          <VisuallyHidden>{variant} - </VisuallyHidden>
+          {children}
+        </>
+      </p>
+      <button
+        className={styles.closeButton}
+        onClick={() => onClose(id)}
+        aria-label="Dismiss message"
+        aria-live="off"
+      >
         <X size={24} />
-        <VisuallyHidden>Dismiss message</VisuallyHidden>
       </button>
     </div>
   );
